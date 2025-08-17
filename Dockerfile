@@ -31,5 +31,6 @@ RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cac
 # Expose Render default port
 EXPOSE 9000
 
-# Start Laravel using public folder
-CMD php -S 0.0.0.0:$PORT -t public
+# Start Laravel: migrate then serve
+CMD php artisan migrate --force && php -S 0.0.0.0:$PORT -t public
+
