@@ -1,5 +1,5 @@
-# Use PHP 8.2 FPM image
-FROM php:8.2-fpm
+# Base image
+FROM php:8.2-cli
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
@@ -16,7 +16,7 @@ RUN apt-get update && apt-get install -y \
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Set working directory to project root
+# Set working directory
 WORKDIR /var/www/html
 
 # Copy all project files
@@ -28,8 +28,8 @@ RUN composer install --no-dev --optimize-autoloader
 # Set permissions for storage and cache
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
-# Expose PHP-FPM port
+# Expose Render default port
 EXPOSE 9000
 
-# Start PHP-FPM server
-CMD ["php-fpm"]
+# Start Laravel using public folder
+CMD php -S 0.0.0.0:$PORT -t public
